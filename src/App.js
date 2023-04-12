@@ -13,17 +13,16 @@ function App() {
   // method setTodoList thay đổi giá trị 
   const [textInput, settextInput] =  useState(""); // lưu text input
   
-  useEffect(() => { // kiểm tra xem có data chưa nếu có thì set 
-    
-    const storagedTodoList = localStorage.getItem(TODO_APP_STORAGE_KEY)
-    if (storagedTodoList !== '[]'){
-      setTodoList(JSON.parse(storagedTodoList));
-    }
-  },[])
+  // useEffect(() => { // kiểm tra xem có data chưa nếu có thì set 
+  //   const storagedTodoList = localStorage.getItem(TODO_APP_STORAGE_KEY)
+  //   if (storagedTodoList !== '[]'){
+  //     setTodoList(JSON.parse(storagedTodoList));
+  //   }
+  // },[])
 
-  useEffect(() => { // lưu data 
-    localStorage.setItem(TODO_APP_STORAGE_KEY, JSON.stringify(todoList))
-  },[todoList])
+  // useEffect(() => { // lưu data 
+  //   localStorage.setItem(TODO_APP_STORAGE_KEY, JSON.stringify(todoList))
+  // },[todoList])
 
   const onTextInputChange = useCallback((e) => { //on change input
     settextInput(e.target.value);
@@ -40,6 +39,11 @@ function App() {
      //click check kiểm tra todo đó có tồn tại trong useState không-> có thì cập nhật isComplete thành true 
     setTodoList(prevState => prevState.map(todo => todo.id === id ? {...todo, isCompleted: true} : todo))
   }, [])
+
+  const onDeleteBtnClick = useCallback((id) => {
+    //xóa 
+    setTodoList( prevState => prevState.filter(todo => todo.id !== id) ) //set lại state todoList bằng cách lọc bỏ id truyền vào
+  }, [])
   return (
     <>
         <h3>Danh sách cần làm</h3>
@@ -54,7 +58,7 @@ function App() {
             value={textInput}
             onChange={onTextInputChange}
         ></Textfield>
-        <TodoList todoList={todoList} onCheckBtnClick={onCheckBtnClick}/>
+        <TodoList todoList={todoList} onCheckBtnClick={onCheckBtnClick} onDeleteBtnClick={onDeleteBtnClick}/>
     </>
   );
 }
